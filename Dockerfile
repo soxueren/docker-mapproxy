@@ -29,8 +29,9 @@ RUN mkdir /mapproxy/cache_data
 
 ADD epsg /mapproxy/
 ADD mapproxy.yaml /mapproxy/
-
+ADD app.py /mapproxy/
 ADD start.sh /start.sh
+
 RUN chmod 0755 /start.sh
 
 EXPOSE 8080
