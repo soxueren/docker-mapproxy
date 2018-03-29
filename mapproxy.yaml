@@ -1,0 +1,436 @@
+# -------------------------------
+# MapProxy example configuration.
+# -------------------------------
+#
+# This is a minimal MapProxy configuration.
+# See full_example.yaml and the documentation for more options.
+#
+
+# Starts the following services:
+# Demo:
+#     http://localhost:8080/demo
+# WMS:
+#     capabilities: http://localhost:8080/service?REQUEST=GetCapabilities
+# WMTS:
+#     capabilities: http://localhost:8080/wmts/1.0.0/WMTSCapabilities.xml
+#     first tile: http://localhost:8080/wmts/osm/webmercator/0/0/0.png
+# Tile service (compatible with OSM/etc.)
+#     first tile: http://localhost:8080/tiles/osm/webmercator/0/0/0.png
+# TMS:
+#     note: TMS is not compatible with OSM/Google Maps/etc.
+#     fist tile: http://localhost:8080/tms/1.0.0/osm/webmercator/0/0/0.png
+# KML:
+#     initial doc: http://localhost:8080/kml/osm/webmercator
+
+services:
+  demo:
+  tms:
+    use_grid_names: true
+    # origin for /tiles service
+    origin: 'nw'
+  kml:
+      use_grid_names: true
+  wmts:
+    restful: true
+    restful_template: '/{Layer}/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}.{Format}'
+    kvp: true
+  wms:
+    md:
+      title: MapProxy WMS Proxy
+      abstract: This is a minimal MapProxy example.
+
+layers:
+  - name: osm
+    title: Omniscale OSM WMS - osm.omniscale.net
+    sources: [osm_cache]
+  - name: img_tdt
+    title: img_cache
+    sources: [img_cache]
+  - name: vec_tdt
+    title: vec_cache
+    sources: [vec_cache]
+  - name: cia_tdt
+    title: cia_cache
+    sources: [cia_cache]
+  - name: cva_tdt
+    title: cva_cache
+    sources: [cva_cache]
+  - name: imgw_tdt
+    title: imgw_cache
+    sources: [imgw_cache]
+  - name: vecw_tdt
+    title: vecw_cache
+    sources: [vecw_cache]
+  - name: ciaw_tdt
+    title: ciaw_cache
+    sources: [ciaw_cache]
+  - name: cvaw_tdt
+    title: cvaw_cache
+    sources: [cvaw_cache]
+caches:
+  osm_cache:
+    grids: [webmercator]
+    sources: [osm_wms]
+  img_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg4326]
+    sources: [img_wmts0,img_wmts2,img_wmts3,img_wmts4,img_wmts5,img_wmts6]   
+  vec_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg4326]
+    sources: [vec_wmts0,vec_wmts2,vec_wmts3,vec_wmts4,vec_wmts5,vec_wmts6]    
+  cia_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg4326]
+    sources: [cia_wmts0,cia_wmts2,cia_wmts3,cia_wmts4,cia_wmts5,cia_wmts6]
+  cva_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg4326]
+    sources: [cva_wmts0,cva_wmts2,cva_wmts3,cva_wmts4,cva_wmts5]
+  imgw_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg3857]
+    sources: [imgw_wmts0,imgw_wmts2,imgw_wmts3,imgw_wmts4,imgw_wmts5,imgw_wmts6]    
+  vecw_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg3857]
+    sources: [vecw_wmts0,vecw_wmts2,vecw_wmts3,vecw_wmts4,vecw_wmts5,vecw_wmts6]
+    #,vecw_wmts1,vecw_wmts2,vecw_wmts3,vecw_wmts4,vecw_wmts5
+  ciaw_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg3857]
+    sources: [ciaw_wmts0,ciaw_wmts2,ciaw_wmts3,ciaw_wmts4,ciaw_wmts5,ciaw_wmts6]
+  cvaw_cache:
+    format: wmts_format
+    request_format: image/png
+    grids:   [epsg3857]
+    sources: [cvaw_wmts0,cvaw_wmts2,cvaw_wmts3,cvaw_wmts4,cvaw_wmts5]
+sources:
+  osm_wms:
+    type: wms
+    req:
+      # use of this source is only permitted for testing
+      url: http://osm.omniscale.net/proxy/service?
+      layers: osm
+  img_wmts0:
+    type: tile
+    grid: epsg4326
+    url: http://t0.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  img_wmts2:
+    type: tile
+    grid: epsg4326
+    url: http://t2.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  img_wmts3:
+    type: tile
+    grid: epsg4326
+    url: http://t3.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  img_wmts4:
+    type: tile
+    grid: epsg4326
+    url: http://t4.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  img_wmts5:
+    type: tile
+    grid: epsg4326
+    url: http://t5.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  img_wmts6:
+    type: tile
+    grid: epsg4326
+    url: http://t6.tianditu.com/img_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=img&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts0:
+    type: tile
+    grid: epsg4326
+    url: http://t0.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts2:
+    type: tile
+    grid: epsg4326
+    url: http://t2.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts3:
+    type: tile
+    grid: epsg4326
+    url: http://t3.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts4:
+    type: tile
+    grid: epsg4326
+    url: http://t4.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts5:
+    type: tile
+    grid: epsg4326
+    url: http://t5.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  vec_wmts6:
+    type: tile
+    grid: epsg4326
+    url: http://t6.tianditu.com/vec_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=vec&&style=default&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts0:
+    type: tile
+    grid: epsg4326
+    url: http://t0.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts2:
+    type: tile
+    grid: epsg4326
+    url: http://t2.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts3:
+    type: tile
+    grid: epsg4326
+    url: http://t3.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts4:
+    type: tile
+    grid: epsg4326
+    url: http://t4.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts5:
+    type: tile
+    grid: epsg4326
+    url: http://t5.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cia_wmts6:
+    type: tile
+    grid: epsg4326
+    url: http://t6.tianditu.com/cia_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cia&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts0:
+    type: tile
+    grid: epsg4326
+    url: http://t0.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts1:
+    type: tile
+    grid: epsg4326
+    url: http://t1.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts2:
+    type: tile
+    grid: epsg4326
+    url: http://t2.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts3:
+    type: tile
+    grid: epsg4326
+    url: http://t3.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts4:
+    type: tile
+    grid: epsg4326
+    url: http://t4.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  cva_wmts5:
+    type: tile
+    grid: epsg4326
+    url: http://t5.tianditu.com/cva_c/wmts?Service=WMTS&Request=GetTile&Version=1.0.0&layer=cva&style=default&Format=tiles&tilematrixset=c&TileMatrix=%(z)s&TileCol=%(x)s&TileRow=%(y)s
+  imgw_wmts0:
+    type: tile
+    grid: epsg3857
+    url: http://t0.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  imgw_wmts2:
+    type: tile
+    grid: epsg3857
+    url: http://t2.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  imgw_wmts3:
+    type: tile
+    grid: epsg3857
+    url: http://t3.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  imgw_wmts4:
+    type: tile
+    grid: epsg3857
+    url: http://t4.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  imgw_wmts5:
+    type: tile
+    grid: epsg3857
+    url: http://t5.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  imgw_wmts6:
+    type: tile
+    grid: epsg3857
+    url: http://t6.tianditu.com/DataServer?T=img_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts0:
+    type: tile
+    grid: epsg3857
+    url: http://t0.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts2:
+    type: tile
+    grid: epsg3857
+    url: http://t2.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts3:
+    type: tile
+    grid: epsg3857
+    url: http://t3.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts4:
+    type: tile
+    grid: epsg3857
+    url: http://t4.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts5:
+    type: tile
+    grid: epsg3857
+    url: http://t5.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  vecw_wmts6:
+    type: tile
+    grid: epsg3857
+    url: http://t6.tianditu.com/DataServer?T=vec_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts0:
+    type: tile
+    grid: epsg3857
+    url: http://t0.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts2:
+    type: tile
+    grid: epsg3857
+    url: http://t2.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts3:
+    type: tile
+    grid: epsg3857
+    url: http://t3.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts4:
+    type: tile
+    grid: epsg3857
+    url: http://t4.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts5:
+    type: tile
+    grid: epsg3857
+    url: http://t5.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  ciaw_wmts6:
+    type: tile
+    grid: epsg3857
+    url: http://t6.tianditu.com/DataServer?T=cia_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts0:
+    type: tile
+    grid: epsg3857
+    url: http://t0.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts2:
+    type: tile
+    grid: epsg3857
+    url: http://t2.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts3:
+    type: tile
+    grid: epsg3857
+    url: http://t3.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts4:
+    type: tile
+    grid: epsg3857
+    url: http://t4.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts5:
+    type: tile
+    grid: epsg3857
+    url: http://t5.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+  cvaw_wmts6:
+    type: tile
+    grid: epsg3857
+    url: http://t6.tianditu.com/DataServer?T=cva_w&x=%(x)s&y=%(y)s&l=%(z)s&format=png
+    transparent: true
+grids:
+  default_srs:
+    base: GLOBAL_GEODETIC
+  webmercator:
+    base: GLOBAL_WEBMERCATOR
+  epsg3857:
+    srs: 'EPSG:3857'
+    bbox: [-20037508.34,-20037508.34,20037508.34,20037508.34]
+    origin: nw
+    # resolutions created from scales with   
+    res: [
+         #  res            level     scale @96.0 DPI
+       147923.8490036738, #  0   559082263.95089293
+        73961.9245018369, #  1   279541131.97544646
+        36980.9622509184, #  2   139770565.98772323
+        18490.4811254592, #  3    69885282.99386162
+         9245.2405627296, #  4    34942641.49693081
+         4622.6202813648, #  5    17471320.74846540
+         2311.3101406824, #  6     8735660.37423270
+         1155.6550703412, #  7     4367830.18711635
+          577.8275351706, #  8     2183915.09355818
+          288.9137675853, #  9     1091957.54677909
+          144.4568837927, # 10      545978.77338954
+           72.2284418963, # 11      272989.38669477
+           36.1142209482, # 12      136494.69334739
+           18.0571104741, # 13       68247.34667369
+            9.0285552370, # 14       34123.67333685
+            4.5142776185, # 15       17061.83666842
+            2.2571388093, # 16        8530.91833421
+            1.1285694046, # 17        4265.45916711
+            0.5642847023, # 18        2132.72958355
+            0.2821423512, # 19        1066.36479178
+            0.1410711756, # 20         533.18239589
+    ]
+  epsg4326:
+    srs: 'EPSG:4326'
+    bbox: [-180, -90, 180, 90]
+    origin: nw
+    # resolutions created from scales with   
+    res: [
+         #  res            level     scale @96.0 DPI
+            0.7031250000, #  0   295829355.44999999
+            0.3515625000, #  1   147914677.72499999
+            0.1757812500, #  2    73957338.86250000
+            0.0878906250, #  3    36978669.43125000
+            0.0439453125, #  4    18489334.71562500
+            0.0219726562, #  5     9244667.35781250
+            0.0109863281, #  6     4622333.67890625
+            0.0054931641, #  7     2311166.83945312
+            0.0027465820, #  8     1155583.41972656
+            0.0013732910, #  9      577791.70986328
+            0.0006866455, # 10      288895.85493164
+            0.0003433228, # 11      144447.92746582
+            0.0001716614, # 12       72223.96373291
+            0.0000858307, # 13       36111.98186646
+            0.0000429153, # 14       18055.99093323
+            0.0000214577, # 15        9027.99546661
+            0.0000107288, # 16        4513.99773331
+            0.0000053644, # 17        2256.99886665
+            0.0000026822, # 18        1128.49943333
+            0.0000013411, # 19         564.24971666
+            0.0000006706, # 20         282.12485833
+    ]
+
+globals:
+  srs:
+    # override system projection file
+    proj_data_dir: '/mapproxy/epsg'
+    # cache options
+  cache:
+    # where to store the cached images
+    base_dir: '/mapproxy/cache_data'
+    # where to store lockfiles for concurrent_requests
+    lock_dir: '/mapproxy/cache_data/locks'
+    # where to store lockfiles for tile creation
+    tile_lock_dir: '/mapproxy/cache_data/tile_locks'
+    # request x*y tiles in one step
+    meta_size: [4, 4]
+    # add a buffer on all sides (in pixel) when requesting
+    # new images
+    meta_buffer: 80
+    # image/transformation options
+  image:
+    paletted: false
+    formats:
+      wmts_format:
+        format: image/png
+        # the custom format will be stored as 8bit PNG
+        mode: RGBA
+        colors: 0
+        transparent: true
+        resampling_method: bicubic
+        encoding_options:
+          jpeg_quality: 60
+          #The algorithm used to quantize (reduce) the image colors
+          quantizer: fastoctree
+          #edit an existing format
+        opacity: 0
+
