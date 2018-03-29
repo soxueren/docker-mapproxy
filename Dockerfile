@@ -24,11 +24,16 @@ RUN easy_install mapproxy
 
 #-------------Application Specific Stuff ----------------------------------------------------
 
-EXPOSE 8080
+RUN mkdir /mapproxy
+RUN mkdir /mapproxy/cache_data
+
+ADD epsg /mapproxy/
+ADD mapproxy.yaml /mapproxy/
 
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
 
+EXPOSE 8080
 #USER www-data
 # Now launch mappproxy in the foreground
 # The script will create a simple config in /mapproxy
