@@ -12,7 +12,5 @@ then
   su $USER_NAME -c "mapproxy-util create -t base-config mapproxy"
 fi
 cd /mapproxy
-su $USER_NAME -c "wget -c http://10.72.187.60:9000/download/mapproxy/mapproxy.yaml -O /mapproxy/mapproxy.yaml"
-su $USER_NAME -c "wget -c http://10.72.187.60:9000/download/mapproxy/epsg -O /mapproxy/epsg"
 su $USER_NAME -c "export http_proxy=10.22.0.29:8080"
 #su $USER_NAME -c "/venv/bin/mapproxy-util serve-develop -b 0.0.0.0:8080 mapproxy.yaml"
