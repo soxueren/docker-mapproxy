@@ -1,30 +1,19 @@
 image: soxueren/docker-maven:latest
 
 variables:
-  REGISTRY_URL: "10.72.3.130:31493"
-  IMAGE_TAG: "8.5-jre8-beta-alpine"
+  REGISTRY_URL: "soxueren"
+  IMAGE_TAG: "1.11"
 
 services:
   - docker:dind
 
-before_script:
-  - echo "export http_proxy=10.72.187.60:1080" >> /etc/profile
-  - echo "export https_proxy=10.72.187.60:1080"  >> /etc/profile
-  - echo "export no_proxy=10.72.3.130"
-  - source /etc/profile
-
 stages:
   - build
-  - deploy
 
 build-image:
   stage: build
-  script:
-    - docker build --pull -t $REGISTRY_URL/tomcat:$IMAGE_TAG .
-
-build-master:
-  stage: deploy
   before_script:
-    - docker login -u sjgs -p sjgs $REGISTRY_URL/v2
+    - docker login -u soxueren -p 1995jxw
   script:
-    - docker push $REGISTRY_URL/tomcat:$IMAGE_TAG
+    - docker build --pull -t $REGISTRY_URL/mapproxy:$IMAGE_TAG .
+    - docker push $REGISTRY_URL/mapproxy:$IMAGE_TAG
