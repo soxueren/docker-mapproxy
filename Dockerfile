@@ -2,8 +2,34 @@
 FROM python:3.5-slim
 MAINTAINER jxw<jxw@jxw>
 
+	
+# 更换软件源
+ENV APT_SRC "http://mirrors.aliyun.com/debian/"
+RUN set -x \
+    && mv /etc/apt/sources.list /etc/apt/sources.list.backup \
+    && echo "deb ${APT_SRC} jessie main non-free contrib\r\ndeb ${APT_SRC} jessie-proposed-updates main non-free contrib\r\ndeb-src ${APT_SRC} jessie main non-free contrib\r\ndeb-src ${APT_SRC} jessie-proposed-updates main non-free contrib" > /etc/apt/sources.list \
+    && apt-get update
+
+# 设置时区 +0800
+RUN set -x \ 
+    && mv /etc/timezone /etc/timezone.backup \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && mv /etc/localtime /etc/localtime.backup \
+    && cp -f /usr/share/zoneinfo/Asia/Chongqing /etc/localtime \
+    && mv /etc/default/rcS /etc/default/rcS.backup \
+    && echo "UTC=yes" > /etc/default/rcS
+
+# 设置UTF8编码 //zh_CN,en_US
+RUN set -x \
+    && apt-get install -y --no-install-recommends locales \
+    && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
+    && apt-get purge -y locales
+ENV LANG zh_CN.utf8
+ENV LC_ALL zh_CN.utf8
+
 #-------------Application Specific Stuff ----------------------------------------------------
-RUN apt-get install --no-install-recommends --no-install-suggests -y \
+
+RUN apt-get install -y \
     python-imaging \
     python-yaml \
     libproj0 \
@@ -15,10 +41,9 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y \
     libjpeg-dev \
     zlib1g-dev \
     libfreetype6-dev \
-    inotify-tools
-                     
-#------------mapproxy----------------------------------------------------------------------
-RUN pip install \
+    python-virtualenv
+
+RUN pip install  \
 	Shapely \
 	Pillow \
 	MapProxy \
@@ -37,7 +62,7 @@ ADD start.sh /start.sh
 
 RUN chmod 0755 /start.sh
 
-EXPOSE 8080 80 443
+EXPOSE 8080
 #USER www-data
 # Now launch mappproxy in the foreground
 # The script will create a simple config in /mapproxy
