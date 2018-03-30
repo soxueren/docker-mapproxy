@@ -7,6 +7,8 @@ ENV APT_SRC "http://mirrors.aliyun.com/debian/"
 RUN set -x \
     && mv /etc/apt/sources.list /etc/apt/sources.list.backup \
     && echo "deb ${APT_SRC} jessie main non-free contrib\r\ndeb ${APT_SRC} jessie-proposed-updates main non-free contrib\r\ndeb-src ${APT_SRC} jessie main non-free contrib\r\ndeb-src ${APT_SRC} jessie-proposed-updates main non-free contrib" > /etc/apt/sources.list \
+    && apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62  \
+    && echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list  \    
     && apt-get update
 
 # 设置时区 +0800
@@ -38,13 +40,11 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y \
     python-dev \
     libjpeg-dev \
     zlib1g-dev \
-    libfreetype6-dev 
+    libfreetype6-dev \
+    inotify-tools
     
 #----------nginx-------------------------------------------------------------------------- 
-RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 && \
-    echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install --no-install-recommends --no-install-suggests -y \
+RUN apt-get install --no-install-recommends --no-install-suggests -y \
 						ca-certificates \
 						nginx=${NGINX_VERSION} \
 						nginx-module-xslt \
