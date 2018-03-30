@@ -67,11 +67,12 @@ RUN apt-get clean
 RUN mkdir /mapproxy
 RUN mkdir /mapproxy/cache_data
 
-ADD nginx.conf /nginx.conf
 ADD epsg /mapproxy/
 ADD mapproxy.yaml /mapproxy/
 ADD app.py /mapproxy/
 ADD start.sh /start.sh
+ADD nginx.conf /etc/nginx/nginx.conf
+
 RUN chmod 0755 /start.sh
 
 EXPOSE 8080 80 443
@@ -80,4 +81,4 @@ EXPOSE 8080 80 443
 # The script will create a simple config in /mapproxy
 # if one does not exist. Typically you should mount 
 # /mapproxy as a volume
-CMD ["nginx", "-g", "daemon off;"]
+CMD [./start.sh]
