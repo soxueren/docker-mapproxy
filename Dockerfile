@@ -2,14 +2,16 @@
 FROM yagajs/mapproxy:1.11-alpine
 MAINTAINER jxw<jxw@jxw>
 
+ADD app.py /mapproxy/
 ADD epsg /mapproxy/
-ADD mapproxy.yaml /mapproxy/
+ADD mapproxy.yaml /docker-entrypoint-initmapproxy.d/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["mapproxy"]
 
 USER mapproxy
 VOLUME ["/mapproxy"]
+
 EXPOSE 8080
 # Stats
 EXPOSE 9191
