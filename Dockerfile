@@ -7,8 +7,6 @@ ENV APT_SRC "http://mirrors.aliyun.com/debian/"
 RUN set -x \
     && mv /etc/apt/sources.list /etc/apt/sources.list.backup \
     && echo "deb ${APT_SRC} jessie main non-free contrib\r\ndeb ${APT_SRC} jessie-proposed-updates main non-free contrib\r\ndeb-src ${APT_SRC} jessie main non-free contrib\r\ndeb-src ${APT_SRC} jessie-proposed-updates main non-free contrib" > /etc/apt/sources.list \
-    && apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62  \
-    && echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list  \    
     && apt-get update
 
 # 设置时区 +0800
@@ -16,7 +14,7 @@ RUN set -x \
     && mv /etc/timezone /etc/timezone.backup \
     && echo "Asia/Shanghai" > /etc/timezone \
     && mv /etc/localtime /etc/localtime.backup \
-    && cp -f /usr/share/zoneinfo/Asia/Chongqing /etc/localtime \
+    && cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && mv /etc/default/rcS /etc/default/rcS.backup \
     && echo "UTC=yes" > /etc/default/rcS
 
@@ -44,15 +42,18 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y \
     inotify-tools
     
 #----------nginx-------------------------------------------------------------------------- 
+RUN   apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62  \
+      && echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list  \    
+      apt-get update
 RUN apt-get install --no-install-recommends --no-install-suggests -y \
-						ca-certificates \
-						nginx=${NGINX_VERSION} \
-						nginx-module-xslt \
-						nginx-module-geoip \
-						nginx-module-image-filter \
-						nginx-module-perl \
-						nginx-module-njs \
-						gettext-base 
+    ca-certificates \
+    nginx=${NGINX_VERSION} \
+    nginx-module-xslt \
+    nginx-module-geoip \
+    nginx-module-image-filter \
+    nginx-module-perl \
+    nginx-module-njs \
+    gettext-base 
                         
 #------------mapproxy----------------------------------------------------------------------
 RUN pip install \
