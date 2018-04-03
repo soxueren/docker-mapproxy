@@ -4,7 +4,7 @@ MAINTAINER jxw<jxw@jxw>
 
 ADD app.py /mapproxy/
 ADD epsg /mapproxy/
-ADD mapproxy.yaml /docker-entrypoint-initmapproxy.d/
+ADD mapproxy.yaml /mapproxy/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["mapproxy"]
